@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Company</title>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/css/bootstrap-slider.min.css}">
+    <link rel="stylesheet" th:href="@{https://fonts.googleapis.com/css?family=Raleway}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="container-fluid" class="col-xs-12">
+    <input type="hidden" id="userId" th:value="${userId}"/>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="container">
+                <ul class="nav nav-tabs ">
+                    <li class="active">
+                        <a id="Home" href="#1" data-toggle="tab">Home</a>
+                    </li>
+                    <li>
+                        <a id="Profile" href="#2" data-toggle="tab">Profile</a>
+                    </li>
+                    <li>
+                        <a id="Applications" href="#3" data-toggle="tab">Applications</a>
+                    </li>
+                    <li>
+                        <a id="Logout" th:href="@{/logout}">Logout</a>
+                    </li>
+                </ul>
+                <div class="tab-content col-xs-12">
+                    <div class="tab-pane active" id="1">
+                        <br><br>
+                        <div class="panel panel-default">
+                            <div class="panel-body col-xs-12">
+                                <div id="custom-search-input">
+                                    <div class="input-group col-xs-12">
+                                        <input type="text" class="form-control input-lg" placeholder="Search your job..." id="searchText"/>
+                                        <span class="input-group-btn">
+                                                <button id="searchButton" class="btn btn-lg" type="button">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                </button>
+                                            </span>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="list-group col-xs-6">
+                                    <div id="filterByCompanyName"></div>
+                                    <div id="filterByLocation"></div>
+                                    <div id="filterBySalary"></div>
+                                </div>
+                                <div id="searchResult" class="list-group col-xs-6">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="2">
+                        <br><br>
+                        <div class="panel panel-default">
+                            <div class="row">
+                                <div class="panel-body">
+                                    <img id="companyProfileImage" th:src="@{/images/profile.jpg}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="panel-body">
+                                    <span>Profile</span>
+                                    <form id="profileForm" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2" for="name">Company : </label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" id="name"
+                                                       placeholder="Company">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2" for="website">Website : </label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" id="website"
+                                                       placeholder="Website">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2" for="location">Location : </label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" id="location"
+                                                       placeholder="Location">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2"
+                                                   for="description">Description : </label>
+                                            <div class="col-xs-10">
+                                                <textarea class="form-control" id="description"
+                                                          placeholder="Description..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2" for="logoUrl">Logo URL : </label>
+                                            <div class="col-xs-10">
+                                                <input type="text" class="form-control" id="logoUrl"
+                                                       placeholder="Logo URL">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label col-xs-2" for="updateCompanyProfile"></label>
+                                            <div class="col-xs-10">
+                                                <button id="updateCompanyProfile" class="btn btn-info" data-loading-text="<i class=\'fa fa-spinner fa-spin \'></i> Processing">Update</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="panel-body">
+                                    <!--Modal box-->
+                                    <div class="modal" id="addJobPost" role="dialog">
+                                        <div class="modal-dialog">
+                                            <!-- Modal content no 1-->
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" id="closeAddJobPost" class="close"
+                                                            data-dismiss="modal">&times;</button>
+                                                    <h4 class="modal-title text-center form-title">Add Post
+                                                        Job</h4>
+                                                </div>
+                                                <div class="modal-body padtrbl">
+                                                    <form id="newJobPostFormId" name="jobPostForm"
+                                                          class="form-horizontal">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4" for="newTitle">Job
+                                                                Title : </label>
+                                                            <div class="col-xs-8">
+                                                                <input type="text" class="form-control" id="newTitle"
+                                                                       placeholder="Job Title">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4" for="newLocation">Location
+                                                                : </label>
+                                                            <div class="col-xs-8">
+                                                                <input type="text" class="form-control" id="newLocation"
+                                                                       placeholder="Location">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4" for="newDescription">Description
+                                                                : </label>
+                                                            <div class="col-xs-8">
+                                                                <textarea class="form-control" id="newDescription"
+                                                                          placeholder="Description..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4"
+                                                                   for="newResponsibilities">Responsibilities
+                                                                : </label>
+                                                            <div class="col-xs-8">
+                                                                <textarea class="form-control" id="newResponsibilities"
+                                                                          placeholder="Responsibilities..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4" for="newSalary">Salary
+                                                                : </label>
+                                                            <div class="col-xs-8">
+                                                                <input type="text" class="form-control" id="newSalary"
+                                                                       placeholder="Salary">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="control-label col-xs-4"
+                                                                   for="newJobPostAdd"></label>
+                                                            <div class="col-xs-8">
+                                                                <button id="newJobPostAdd" class="btn btn-success" data-loading-text="<i class=\'fa fa-spinner fa-spin \'></i> Processing">Add
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/ Modal box-->
+                                    <span>Posted Jobs <img id="addJobPostImg" th:src="@{/images/plus.png}" href="#"
+                                                           data-target="#addJobPost" data-toggle="modal"
+                                                           style="float: right; position: relative"></span>
+                                    <div id="jobPosted">
+
+                                    </div>
+                                    <!-- Modal box-->
+                                    <div id="completeDoneMessage">
+                                        <div class="modal successMessageModal"
+                                             id="successMessageModal" role="dialog">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    <div class="modal-body padtrbl">
+                                                        <div class="bs-example">
+                                                            <div class="alert alert-success fade in">
+                                                                <strong id="successMessage"></strong>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#" id="successMessageModalAnchor" style="display: none"
+                                           class="list-group-item list-group-item-action searchResult"
+                                           data-target="#successMessageModal" data-toggle="modal">
+                                        </a>
+                                    </div>
+                                    <!--/ Modal box-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane " id="3">
+                        <br><br>
+                        <div class="panel panel-default">
+                            <div class="panel-body col-xs-12" id="jobApplicationsDiv">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{https://code.jquery.com/jquery-2.2.0.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/bootstrap-slider.min.js}"></script>
+<script th:src="@{/company.js}"></script>
+</body>
+</html>
